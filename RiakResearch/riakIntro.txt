@@ -1,0 +1,84 @@
+Introduction to Riak:
+
+	Riak is a distributed NoSQL database. It is designed to allow for maximum data availiblity. It does this by distributing data across multiple servers.
+
+When to use Riak:
+
+Riak Data types:
+
+Installing Riak:
+	- First run the following command to install the prerequisite packages:
+	
+		sudo apt-get install libc6 libc6-dev libc6-dbg
+
+	- Next, we need to get the signing key and add it to apt-get:
+
+		curl https://packagecloud.io/gpg.key | sudo apt-key add -
+
+	- Then, install apt-transport-https to enable the ability to fetch packages of https
+
+		sudo apt-get install -y apt-transport-https
+
+	- Finally, download and install Riak KV:
+
+		curl -s https://packagecloud.io/install/repositories/basho/riak/script.deb.sh | sudo bash
+		sudo apt-get install riak=2.1.4-1
+
+Using Riak With Python:
+
+	- First, we need to install the necessary ubuntu packages:
+		
+		sudo apt-get install python-dev libffi-dev libssl-dev
+	
+	- Next, we need to install the riak python libraries (Can use either of the following):
+		
+		easy_install riak
+		sudo pip install riak
+
+
+	- Riak is now ready to use with python. Here are some useful commands:
+	
+		- import riak
+			- This imports the riak library
+
+		- myClient = riak.RiakClient(pb_port=8087, protocol='pbc', host='hostname')
+			- This establishes the connection with the database
+
+		- myBucket = myClient.bucket('bucketName')
+			- This retrieves a reference to the bucket, bucketName, from the database
+
+		- key = myBucket.new('one', data='1')
+		- key.store()
+			- These commands store the key-value pair {"one", "1"} in bucket bucketName
+
+		- fetchedData = myBucket.get('one')
+			- This gets the data object containing 1 from the database
+
+		- fetchedData.delete()
+			- This deletes the key-value pair {"one", "1"} from the bucket
+
+
+Riak data model example:
+	
+	- Riak stores data in buckets, and each bucket can store multiple key-value pairs. An example of this follows bellow.
+
+		usernames = {
+			'mohan': {
+				{'name': 'Sriram Mohan'},
+				{'password': 'password'},
+				{'salt': 'mohanSalt'}
+			},
+			'mellor': {
+				{'name': 'JP Mellor'},
+				{'password': 'password'},
+				{'salt': 'mellorSalt'}
+			}
+		}
+
+	- In the above example, 'usernames' is the name of the bucket while 'mohan' and 'mellor' are keys within the bucket that map to the data about the particular user.
+
+	
+Sources:
+
+-Riak Documentation
+http://docs.basho.com/riak/kv/2.1.4/
