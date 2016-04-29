@@ -56,7 +56,7 @@ class ServeSite(object):
 		userBucket = riakClient.bucket(userbucketName)
 		users = ""
 		for user in userBucket.get_keys():
-			users = users + user + '\n'
+			users = users + "<p>" + user + "</p>"
 		return users
 
 	@cherrypy.expose
@@ -102,16 +102,33 @@ class ServeSite(object):
 			fs = gridfs.GridFS(mongoDB)
 			uName = cherrypy.session.get('username', 'None')
 			filePutID = fs.put(fileData, filename=sName, username=uName)
-			# for testing to ensure file was uploaded
+			raise cherrypy.HTTPRedirect("/uploadPage?uploadMessage='Upload successful!'")
 	
 	# for testing
 	@cherrypy.expose
 	def uploadedSounds(self):
-		return "Going to display all uploaded file names here"
+		if(cherrypy.session.get('loggedIn','None')==True):
+			fs = gridfs.GridFS(mongoDB)
+			username = cherrypy.session.get('username', 'None')
+
+			fileNames = ""
+			for soundFile in fs.find({"username": username}):
+				fileNames = fileNames + "<p>" + soundFile.filename + "</p>"
+
+			return fileNames
+		else:
+			raise cherrypy.HTTPRedirect("/index")
 			
 	@cherrypy.expose
 	def allFiles(self):
-		return """Going to display all files here for testing purposes"""
+		fs = gridfs.GridFS(mongoDB)
+		userBucket = riakClient.bucket(userbucketName)
+		allSounds = ""
+		for user in userBucket.get_keys():
+			for soundFile in fs.find({"username": user}):
+				allSounds = allSounds + "<p>" + soundFile.filename + "</p>"
+
+		return allSounds
 
 if __name__ == '__main__':
 	conf = {
@@ -129,8 +146,8 @@ if __name__ == '__main__':
 	}
 
 
-cherrypy.server.socket_host = '127.0.0.1'
-cherrypy.server.socket_port = 8080
+cherrypy.server.socket_host = '0.0.0.0'
+cherrypy.server.socket_port = 80
 cherrypy.quickstart(ServeSite(), '/',conf)
 
 
