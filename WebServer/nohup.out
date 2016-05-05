@@ -1,0 +1,34 @@
+/usr/local/lib/python2.7/dist-packages/riak-2.4.2-py2.7.egg/riak/security.py:45: UserWarning: OpenSSL 1.0.1f 6 Jan 2014 (>= 1.0.1g required), TLS 1.2 support: False
+[28/Apr/2016:17:16:08] ENGINE Listening for SIGHUP.
+[28/Apr/2016:17:16:08] ENGINE Listening for SIGTERM.
+[28/Apr/2016:17:16:08] ENGINE Listening for SIGUSR1.
+[28/Apr/2016:17:16:08] ENGINE Bus STARTING
+[28/Apr/2016:17:16:08] ENGINE Started monitor thread '_TimeoutMonitor'.
+[28/Apr/2016:17:16:08] ENGINE Started monitor thread 'Autoreloader'.
+[28/Apr/2016:17:16:13] ENGINE Error in 'start' listener <bound method Server.start of <cherrypy._cpserver.Server object at 0x7ff4449892d0>>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/cherrypy/process/wspbus.py", line 203, in publish
+    output.append(listener(*args, **kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/cherrypy/_cpserver.py", line 168, in start
+    ServerAdapter.start(self)
+  File "/usr/local/lib/python2.7/dist-packages/cherrypy/process/servers.py", line 170, in start
+    wait_for_free_port(*self.bind_addr)
+  File "/usr/local/lib/python2.7/dist-packages/cherrypy/process/servers.py", line 438, in wait_for_free_port
+    raise IOError("Port %r not free on %r" % (port, host))
+IOError: Port 80 not free on '0.0.0.0'
+
+[28/Apr/2016:17:16:13] ENGINE Shutting down due to error in start listener:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/cherrypy/process/wspbus.py", line 241, in start
+    self.publish('start')
+  File "/usr/local/lib/python2.7/dist-packages/cherrypy/process/wspbus.py", line 221, in publish
+    raise exc
+ChannelFailures: IOError("Port 80 not free on '0.0.0.0'",)
+
+[28/Apr/2016:17:16:13] ENGINE Bus STOPPING
+[28/Apr/2016:17:16:13] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('0.0.0.0', 80)) already shut down
+[28/Apr/2016:17:16:13] ENGINE Stopped thread 'Autoreloader'.
+[28/Apr/2016:17:16:13] ENGINE Stopped thread '_TimeoutMonitor'.
+[28/Apr/2016:17:16:13] ENGINE Bus STOPPED
+[28/Apr/2016:17:16:13] ENGINE Bus EXITING
+[28/Apr/2016:17:16:13] ENGINE Bus EXITED

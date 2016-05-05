@@ -1,0 +1,7 @@
+For week eight:
+	- Research:
+		- Indexes
+		- Create projects
+	- Project
+		- Way to play sounds
+		- Add tags from webpage
