@@ -4,10 +4,12 @@
 	</head>
 	<body>
 		<a href="signOut">Sign Out</a>
+		<a href="playSounds">Listen To Your Sounds</a>
 		<div>%s</div>
 		<form enctype="multipart/form-data" action="uploadMP3" method="post">
 			<p>Sound File: <input type="file" name="uploadedFile"></p>
 			<p>Sound Name: <input type="text" name="sName"></p>
+			<p>Tags (comma separated): <input type="text" name="tags"></p>
 			<p><input type="submit" value="Upload"></p>
 		</form>
 	</body>

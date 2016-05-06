@@ -1,7 +1,9 @@
-For week eight:
+For week Nine:
 	- Research:
-		- Indexes
-		- Create projects
+		- Finish
 	- Project
-		- Way to play sounds
-		- Add tags from webpage
+		- Search by tag
+		- Add friends
+		- View other peoples songs
+		- bootstrap website
+		- Replication Riak
