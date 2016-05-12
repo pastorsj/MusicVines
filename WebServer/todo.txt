@@ -7,3 +7,4 @@ For week Nine:
 		- View other peoples songs
 		- bootstrap website
 		- Replication Riak
+		- Allow users to delete songs

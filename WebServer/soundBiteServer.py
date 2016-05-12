@@ -10,6 +10,7 @@ from cherrypy.lib import sessions
 import riak
 from riak import RiakClient, RiakNode
 from pymongo import MongoClient
+from bson import ObjectId
 from jinja2 import Environment, FileSystemLoader
 
 # declare global variables
@@ -114,7 +115,8 @@ class ServeSite(object):
 			uName = cherrypy.session.get('username', 'None')
 			tags = str(tags).split(",")
 			tags = map(str.strip, tags)
-			filePutID = fs.put(fileData, filename=sName, username=uName)
+			filePutID = fs.put(fileData, filename=sName)
+			print(type(filePutID))
 			Neo4jTesting.neoAddSong(filePutID, sName)
 			Neo4jTesting.neoAddUserSong(uName, filePutID)
 			for tag in tags:
@@ -147,12 +149,19 @@ class ServeSite(object):
 		return allSounds
 
 	@cherrypy.expose
-	def playSounds(self):
+	def playSounds(self, user=''):
 		if(cherrypy.session.get('loggedIn', 'None')==True):
 			fs = gridfs.GridFS(mongoDB)
-			username = cherrypy.session.get('username', 'None')
-			soundHtml = """<a href="/uploadPage">Upload Page</a>"""
-			for soundFile in fs.find({"username": username}):
+			username = ""
+			if(user==''):
+				username = cherrypy.session.get('username', 'None')
+			else:
+				username = user
+
+			songIDs = Neo4jTesting.neoGetUserSongs(username)
+			soundHtml = ""
+			for song in songIDs:
+				soundFile = fs.get(ObjectId(song))
 				soundFilename = soundFile.filename
 				filename = "sounds/" + soundFilename
 				fileForSound = open(filename, 'wb')
@@ -161,10 +170,78 @@ class ServeSite(object):
 				soundHtml = soundHtml + """<div>%s<p><audio controls>
 								<source src="%s" type="audio/mpeg">
 								Browser does not support this feature
-							</audio></p></div>"""%(soundFilename,filename)
-			return soundHtml+"</a>"
+							</audio><form method="post" action="deleteSong"><input type="submit" value="Delete Song"><input type="hidden" name="songID" value="%s"></form></p></div>"""%(soundFilename,filename,song)
+			soundHtml = soundHtml+"</a>"
+			tmpl = env.get_template('playSounds.html')
+			return tmpl.render()%soundHtml
 		else:
 			raise cherrypy.HTTPRedirect("/index")
+
+	@cherrypy.expose
+	def friendPage(self):
+		if(cherrypy.session.get('loggedIn', 'None')==True):
+			friendString = ""
+			wannaBeString = ""
+			username = cherrypy.session.get('username','None')
+			friendList = Neo4jTesting.neoGetFriends(username)
+			for friend in friendList:
+				friendString = friendString + """<p><a href="playSounds?user=%s">%s</a></p>"""%(friend,friend)
+			requestList = Neo4jTesting.neoGetFriendRequests(username)
+			for friend in requestList:
+				wannaBeString = wannaBeString + """<form method="post" action="addFriend">%s <input type="submit" value="Accept Friend Request"><input type="hidden" value="%s" name="friendToAdd"></form>"""%(friend, friend)
+			tmpl = env.get_template('addFriend.html')
+			return tmpl.render()%(friendString,wannaBeString)
+		else:
+			raise cherrypy.HTTPRedirect("/index")
+
+	@cherrypy.expose
+	def addFriend(self, friendToAdd):
+		if(cherrypy.session.get('loggedIn', 'None')==True):
+			username = cherrypy.session.get('username','None')
+			Neo4jTesting.neoAddFriend(username, friendToAdd)
+			raise cherrypy.HTTPRedirect('/friendPage')
+		else:
+			raise cherrypy.HTTPRedirect('/index')
+
+	@cherrypy.expose
+	def searchByTag(self,songs=''):
+		if(cherrypy.session.get('loggedIn', 'None')==True):
+			tmpl = env.get_template('searchByTag.html')
+			return tmpl.render()%songs
+		else:
+			raise cherrypy.HTTPRedirect('/index')
+
+	@cherrypy.expose
+	def getByTag(self,tagName):
+		if(cherrypy.session.get('loggedIn', 'None')==True):
+			fs = gridfs.GridFS(mongoDB)
+			soundHtml = ""
+			songIDs = Neo4jTesting.neoFindByTag(tagName)
+			for song in songIDs:
+				soundFile = fs.get(ObjectId(song))
+				soundFilename = soundFile.filename
+				filename = "sounds/" + soundFilename
+				fileForSound = open(filename, 'wb')
+				fileForSound.write(soundFile.read())
+				fileForSound.close()
+				soundHtml = soundHtml + """<div>%s<p><audio controls>
+                                                                <source src="%s" type="audio/mpeg">
+                                                                Browser does not support this feature
+                                                        </audio></p></div>"""%(soundFilename,filename)
+			tmpl = env.get_template('searchByTag.html')
+			return tmpl.render()%soundHtml
+		else:
+			raise cherrypy.HTTPRedirect('/index')
+
+	@cherrypy.expose
+	def deleteSong(self, songID):
+		if(cherrypy.session.get('loggedIn', 'None')==True):
+			fs = gridfs.GridFS(mongoDB)
+			fs.delete(ObjectId(songID))
+			Neo4jTesting.neoDeleteSong(songID)
+			raise cherrypy.HTTPRedirect('/playSounds')
+		else:
+			raise cherrypy.HTTPRedirect('/index')
 
 if __name__ == '__main__':
 	conf = {
