@@ -2,13 +2,31 @@
 <html>
 	<head>
 		<title>Sound Bites</title>
+	</head>
+	<body>
+		<a href="index">Login Page</a>
+		<h1>Create account</h1>
+		<div style="color:red;">%s</div>
+		<form action="createUser" method='post'>
+			<p>Name: <input type="text" name="name"></p>
+			<p>Username: <input type="text" name="username"></p>
+			<p>Password: <input type="password" name="password"></p>
+			<p><input type="submit" value="Submit"></p>
+		</form>
+	</body>
+</html>
+<!--
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sound Bites</title>
 		<link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="static/css/main.css">
 	</head>
 	<div class='blue-banner'>Music Vines</div>
-	<body class = 'container' background="../images/BerlinPhilharmonic.jpg">
+	<body class = 'container' background="static/images/BerlinPhilharmonic.jpg">
 		<div class = "col-md-4 col-md-offset-4 vertical_center">
-			<form class = "" action="createUser" method='post'>
+			<form action="createUser" method='post'>
 				<div class="form-group">
 					<input type="text" class="form-control input-lg" placeholder="Name" name="name">
 				</div>
@@ -27,4 +45,4 @@
 			</form>
 		</div>
 	</body>
-</html>
+</html>-->
