@@ -13,8 +13,12 @@
         <a class = "btn" href="uploadPage" style="padding:5px">Upload Page</a>
         <a class = "btn" href="friendPage" style=padding:5px">Friend Information</a>
         <form method="post" action="getByTag">
-            <input type="text" name="tagName">
-            <input type="submit" value="Search by tag">
+            <div class="form-group">
+                <input type="text" name="tagName" placeholder="Tag">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search by tag">
+            </div>
         </form>
         %s
     </body>
