@@ -5,13 +5,13 @@
 
 .blue-banner {
     background-color: #004d99;
-    height: 75px;
+    height: 50px;
     width: 100%;
     color: white;
     font-family: 'Brush Script MT', cursive;
-	font-size: 60px;
+	font-size: 48px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 500;
-	line-height: 62px;
+	line-height: 50px;
 }
