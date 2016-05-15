@@ -9,21 +9,21 @@
 	<div class='blue-banner'>Music Vines</div>
 	<body class = 'container'>
 		<div class="btn-group">
-			<button onclick="signOut" style="padding:5px">Sign Out</button>
-			<button onclick="playSounds" style="padding:5px">Listen To Your Sounds</button>
-			<button onclick="searchByTag" style="padding:5px">Search By Tag</button>
-			<button onclick="friendPage" style="padding:5px">Friend Information</button>
+			<button onclick="location.href = 'signOut''" style="padding:5px">Sign Out</button>
+			<button onclick="location.href = 'playSounds'" style="padding:5px">Listen To Your Sounds</button>
+			<button onclick="location.href = 'searchByTag'" style="padding:5px">Search By Tag</button>
+			<button onclick="location.href = 'friendPage'" style="padding:5px">Friend Information</button>
 		</div>
 		<div>%s</div>
-		<form enctype="multipart/form-data" action="uploadMP3" method="post">
+		<form class = "col-xs-3" enctype="multipart/form-data" action="uploadMP3" method="post">
 			<div class="form-group">
-				<input class="form-control" name="uploadedFile">
+				<input class="form-control" name="uploadedFile" type='file'>
 			</div>
 			<div class="form-group">
-				<input class="form-control input-lg" type="text" placeholder="Sound Name" name="sName">
+				<input class="form-control input-sm" type="text" placeholder="Sound Name" name="sName">
 			</div>
 			<div class="form-group">
-				<input class="form-control input-lg" type="text" placeholder="Tags" name="tags">
+				<input class="form-control input-sm" type="text" placeholder="Tags" name="tags">
 			</div>
 			<div class="form-group">
 				<button class="btn btn-primary btn-block" value="Upload">Upload</button>
