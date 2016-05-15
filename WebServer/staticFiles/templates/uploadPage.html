@@ -4,28 +4,31 @@
 		<title>Sound Bites</title>
 		<link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="static/css/main.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	</head>
 	<div class='blue-banner'>Music Vines</div>
-	<body class = 'container' background="static/images/MusicNotes.jpg">
-		<a class = "btn" href="signOut" style="padding:5px">Sign Out</a>
-		<a class = "btn" href="playSounds" style="padding:5px">Listen To Your Sounds</a>
-		<a class = "btn" href="searchByTag" style="padding:5px">Search By Tag</a>
-		<a class = "btn" href="friendPage" style="padding:5px">Friend Information</a>
-		<div>%s</div>
-		<form class = "col-xs-3" enctype="multipart/form-data" action="uploadMP3" method="post">
-			<div class="form-group">
-				<input name="uploadedFile" type='file'>
-			</div>
-			<div class="form-group">
-				<input class="form-control input-sm" type="text" placeholder="Sound Name" name="sName">
-			</div>
-			<div class="form-group">
-				<input class="form-control input-sm" type="text" placeholder="Tags" name="tags">
-			</div>
-			<div class="form-group">
-				<button class="btn btn-primary btn-block" value="Upload">Upload</button>
-			</div>
-		</form>
+	<body background="static/images/MusicNotes.jpg">
+		<div class="text-center">
+			<a class = "btn" href="signOut" style="padding:5px">Sign Out</a>
+			<a class = "btn" href="playSounds" style="padding:5px">Listen To Your Sounds</a>
+			<a class = "btn" href="searchByTag" style="padding:5px">Search By Tag</a>
+			<a class = "btn" href="friendPage" style="padding:5px">Friend Information</a>
+		</div>
+		<div class="container">
+			<div>%s</div>
+			<form class = "col-xs-3" enctype="multipart/form-data" action="uploadMP3" method="post">
+				<div class="form-group">
+					<input name="uploadedFile" type='file'>
+				</div>
+				<div class="form-group">
+					<input class="form-control input-sm" type="text" placeholder="Sound Name" name="sName">
+				</div>
+				<div class="form-group">
+					<input class="form-control input-sm" type="text" placeholder="Tags" name="tags">
+				</div>
+				<div class="form-group">
+					<button class="btn btn-primary btn-block" value="Upload">Upload</button>
+				</div>
+			</form>
+		</div>
 	</body>
 </html>
