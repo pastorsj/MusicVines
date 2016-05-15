@@ -4,19 +4,30 @@
 		<title>Sound Bites</title>
 		<link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="static/css/main.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	</head>
 	<div class='blue-banner'>Music Vines</div>
 	<body class = 'container'>
-		<a href="signOut" style="padding:5px">Sign Out</a>
-		<a href="playSounds" style="padding:5px">Listen To Your Sounds</a>
-		<a href="searchByTag" style="padding:5px">Search By Tag</a>
-		<a href="friendPage" style="padding:5px">Friend Information</a>
+		<div class="btn-group">
+			<button onclick="signOut" style="padding:5px">Sign Out</button>
+			<button onclick="playSounds" style="padding:5px">Listen To Your Sounds</button>
+			<button onclick="searchByTag" style="padding:5px">Search By Tag</button>
+			<button onclick="friendPage" style="padding:5px">Friend Information</button>
+		</div>
 		<div>%s</div>
 		<form enctype="multipart/form-data" action="uploadMP3" method="post">
-			<p>Sound File: <input type="file" name="uploadedFile"></p>
-			<p>Sound Name: <input type="text" name="sName"></p>
-			<p>Tags (comma separated): <input type="text" name="tags"></p>
-			<p><input type="submit" value="Upload"></p>
+			<div class="form-group">
+				<input class="form-control" name="uploadedFile">
+			</div>
+			<div class="form-group">
+				<input class="form-control input-lg" type="text" placeholder="Sound Name" name="sName">
+			</div>
+			<div class="form-group">
+				<input class="form-control input-lg" type="text" placeholder="Tags" name="tags">
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary btn-block" value="Upload">Upload</button>
+			</div>
 		</form>
 	</body>
 </html>
