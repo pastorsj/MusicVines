@@ -29,6 +29,22 @@ def neoAddTag(songID, tag):
     session.close()
     return
 
+def neoAddLike(userName, songID):
+    session = graph_db.session()
+    session.run("MATCH (a:User),(b:Song) " + 
+                "WHERE a.Username = \'" + escapeSpecialCharacters(userName) + "\' AND b.ID = '%s'"%str(songID) + " " + 
+                "CREATE UNIQUE (a)-[:LIKES]->(b);")
+    session.close()
+    return
+
+def neoUnlike(username, soungID):
+    session = graph_db.session()
+    session.run("MATCH (a:User)-[c:LIKES]->(b:Song) " +
+                "WHERE a.Username = \'" + escapeSpecialCharacters(userName) + "\' AND b.ID = '%s'"%str(songID) + " " +
+                "DELETE c;")
+    session.close()
+    return
+
 def neoAddUser(userName):
     session = graph_db.session()
     session.run("CREATE (node:User {Username: \'" + escapeSpecialCharacters(userName) +"\'})")
@@ -81,7 +97,6 @@ def neoDeleteTag(songID, tag):
 #                        "return a.ID")
 def neoGetFriendsSongs(userName):
     session = graph_db.session()
-    #                                              lol you put "HASHSONG" here - JOEL
     results = session.run("MATCH (a:User)-[:FRIEND]-(b:User)->[:HASSONG]-(c:Song) "+
 			"WHERE a.Username = \'" + escapeSpecialCharacters(userName) + "\' return c")
     for record in results:
@@ -100,6 +115,15 @@ def neoGetSimilar(songID):
     session.close()
     return
 
+def neoGetSimilarByLikes(baseUsername):
+    session = graph_db.session()
+    results = session.run("MATCH (a { Username: \'" + baseUsername + "\'})-[:FRIENDS]->()-[:HASSONG]->(b) RETURN b.ID as id")
+    for record in results:
+        print(record["name"])
+    results.close()
+    session.close()
+    return
+
 def neoFindByTag(tagName):
     session = graph_db.session()
     result = session.run("MATCH (a:Tag)<-[:TAGGED]-(b:Song) " +
@@ -112,6 +136,8 @@ def neoDeleteSong(songID):
     result = session.run("MATCH (a:Song) " +
 			"WHERE a.ID = '%s' "%str(songID) +
 			"DETACH DELETE a")
+    session.close()
+    return
 
 def neoGetFriendRequests(username):
     session = graph_db.session()

@@ -170,8 +170,10 @@ class ServeSite(object):
 				soundHtml = soundHtml + """<div>%s<p><audio controls>
 								<source src="%s" type="audio/mpeg">
 								Browser does not support this feature
-							</audio><form method="post" action="deleteSong"><input type="submit" value="Delete Song"><input type="hidden" name="songID" value="%s"></form></p></div>"""%(soundFilename,filename,song)
-			soundHtml = soundHtml+"</a>"
+							</audio>"""%(soundFilename,filename)
+				if(user==''):
+					soundHtml = soundHtml + """<form method="post" action="deleteSong"><input type="submit" value="Delete Song"><input type="hidden" name="songID" value="%s"></form>"""%song
+			soundHtml = soundHtml+"</p></div></a>"
 			tmpl = env.get_template('playSounds.html')
 			return tmpl.render()%soundHtml
 		else:
