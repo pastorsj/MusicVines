@@ -101,28 +101,24 @@ def neoGetFriendsSongs(userName):
 			"WHERE a.Username = \'" + escapeSpecialCharacters(userName) + "\' return c")
     for record in results:
     	print(record["name"])
-    results.close()
+    
     session.close()
     return
 
 def neoGetSimilar(songID):
     session = graph_db.session()
     results = session.run("MATCH (a:Song)-[:TAGGED]->(t:Tag)<-[:TAGGED]-(b:Song) " +
-			" WHERE a.ID = '%s'"%escapeSpecialCharacters(str(songID)) +" return b")
-    for record in results:
-        print(record["name"])
-    results.close()
+			" WHERE a.ID = '%s'"%escapeSpecialCharacters(str(songID)) +" return DISTINCT b.ID as id")
+    
     session.close()
-    return
+    return [x['id'] for x in results]
 
 def neoGetSimilarByLikes(baseUsername):
     session = graph_db.session()
-    results = session.run("MATCH (a { Username: \'" + baseUsername + "\'})-[:FRIENDS]->()-[:HASSONG]->(b) RETURN b.ID as id")
-    for record in results:
-        print(record["name"])
-    results.close()
+    results = session.run("MATCH (a { Username: \'" + baseUsername + "\'})-[:LIKES]->()<-[:LIKES]-()-[:LIKES]->(b:Song) RETURN DISTINCT b.ID as id")
+    
     session.close()
-    return
+    return [x['id'] for x in results]
 
 def neoFindByTag(tagName):
     session = graph_db.session()
