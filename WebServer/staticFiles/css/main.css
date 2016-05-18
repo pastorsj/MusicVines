@@ -4,7 +4,7 @@
 }
 
 .blue-banner {
-    background-color: #004d99;
+    background-color: #3b5998;
     height: 50px;
     color: white;
     font-family: 'Brush Script MT', cursive;
@@ -16,7 +16,11 @@
 }
 
 .btn {
-    background-color: #ADD8E6
+    background-color: #ADD8E6;
+}
+
+.new_reg {
+    background-color: #CA1F7B;
 }
 
 .center_div {
@@ -24,5 +28,5 @@
 }
 
 .grey_bg {
-    background-color: #DCDCDC
+    background-color: #dfe3ee;
 }
