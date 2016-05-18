@@ -1,12 +1,32 @@
-<a class = "btn" href="signOut" style="padding:5px">Sign Out</a>
-<a class = "btn" href="uploadPage" style="padding:5px">Upload Page</a>
-<a class = "btn" href="searchByTag" style="padding:5px">Search By Tag</a>
-<a class = "btn" href="friendPage" style=padding:5px">Friend Information</a>
-<p>
-	<h1>Songs Recommended Based on Your Likes</h1>
-	%s
-</p>
-<p>
-	<h1>Songs Recommended Based on Your Favorite Tags</h1>
-	%s
-</p>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sound Bites</title>
+		<link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="static/css/main.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	</head>
+    <div class = 'blue-banner'>Music Vines</div>
+    <body class="grey_bg">
+        <div class="text-center">
+            <a class = "btn" href="signOut" style="padding:5px">Sign Out</a>
+			<a class = "btn" href="uploadPage" style="padding:5px">Upload Page</a>
+			<a class = "btn" href="searchByTag" style="padding:5px">Search By Tag</a>
+			<a class = "btn" href="friendPage" style=padding:5px">Friend Information</a>
+        </div>
+        <div class = "col-md-5">
+			<div>
+				<h3>Songs Recommended Based on Your Likes</h3>
+				%s
+			</div>
+			<div>
+				<h3>Songs Recommended Based on Your Favorite Tags</h3>
+				%s
+			</div>
+		</div>
+    </body>
+</html>
+
+
+
