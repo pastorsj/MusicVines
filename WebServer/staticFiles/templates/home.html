@@ -18,16 +18,21 @@
 					<input type="password" class="form-control input-lg" placeholder="Password" name="password">
 				</div>
 				<div class="form-group">
-					<button class="btn btn-primary btn-lg btn-block" value="Submit">Sign In</button>
+					<button id="login_button" class="btn btn-primary btn-lg btn-block" value="Submit">Sign In</button>
 					<div class="form-group">
 						<a class="btn new_reg btn-primary" href="register">New Registration</a>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="alert alert-danger">
+					<div id = "login_alert" class="alert alert-danger hidden">
 							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     						<strong>%s</strong>
   					</div>
+					<script>
+						$('#login_button').click(function () {
+							$('#login_alert').removeClass('hidden');
+						});
+					</script>
 				</div>
 				
 			</form>
