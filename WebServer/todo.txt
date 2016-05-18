@@ -2,9 +2,6 @@ For week Nine:
 	- Research:
 		- Finish
 	- Project
-		- Search by tag
-		- Add friends
-		- View other peoples songs
-		- bootstrap website
-		- Replication Riak
-		- Allow users to delete songs
+		- add liking
+		- recommend by tags, likes
+		- finish bootstraping

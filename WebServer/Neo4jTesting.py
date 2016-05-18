@@ -29,6 +29,22 @@ def neoAddTag(songID, tag):
     session.close()
     return
 
+def neoAddLike(userName, songID):
+    session = graph_db.session()
+    session.run("MATCH (a:User),(b:Song) " + 
+                "WHERE a.Username = \'" + escapeSpecialCharacters(userName) + "\' AND b.ID = '%s'"%str(songID) + " " + 
+                "CREATE UNIQUE (a)-[:LIKES]->(b);")
+    session.close()
+    return
+
+def neoUnlike(username, soungID):
+    session = graph_db.session()
+    session.run("MATCH (a:User)-[c:LIKES]->(b:Song) " +
+                "WHERE a.Username = \'" + escapeSpecialCharacters(userName) + "\' AND b.ID = '%s'"%str(songID) + " " +
+                "DELETE c;")
+    session.close()
+    return
+
 def neoAddUser(userName):
     session = graph_db.session()
     session.run("CREATE (node:User {Username: \'" + escapeSpecialCharacters(userName) +"\'})")
@@ -81,24 +97,28 @@ def neoDeleteTag(songID, tag):
 #                        "return a.ID")
 def neoGetFriendsSongs(userName):
     session = graph_db.session()
-    #                                              lol you put "HASHSONG" here - JOEL
     results = session.run("MATCH (a:User)-[:FRIEND]-(b:User)->[:HASSONG]-(c:Song) "+
 			"WHERE a.Username = \'" + escapeSpecialCharacters(userName) + "\' return c")
     for record in results:
     	print(record["name"])
-    results.close()
+    
     session.close()
     return
 
 def neoGetSimilar(songID):
     session = graph_db.session()
     results = session.run("MATCH (a:Song)-[:TAGGED]->(t:Tag)<-[:TAGGED]-(b:Song) " +
-			" WHERE a.ID = '%s'"%escapeSpecialCharacters(str(songID)) +" return b")
-    for record in results:
-        print(record["name"])
-    results.close()
+			" WHERE a.ID = '%s'"%escapeSpecialCharacters(str(songID)) +" return DISTINCT b.ID as id")
+    
     session.close()
-    return
+    return [x['id'] for x in results]
+
+def neoGetSimilarByLikes(baseUsername):
+    session = graph_db.session()
+    results = session.run("MATCH (a { Username: \'" + baseUsername + "\'})-[:LIKES]->()<-[:LIKES]-()-[:LIKES]->(b:Song) RETURN DISTINCT b.ID as id")
+    
+    session.close()
+    return [x['id'] for x in results]
 
 def neoFindByTag(tagName):
     session = graph_db.session()
@@ -112,6 +132,8 @@ def neoDeleteSong(songID):
     result = session.run("MATCH (a:Song) " +
 			"WHERE a.ID = '%s' "%str(songID) +
 			"DETACH DELETE a")
+    session.close()
+    return
 
 def neoGetFriendRequests(username):
     session = graph_db.session()

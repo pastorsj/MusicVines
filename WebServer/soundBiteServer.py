@@ -170,10 +170,27 @@ class ServeSite(object):
 				soundHtml = soundHtml + """<div>%s<p><audio controls>
 								<source src="%s" type="audio/mpeg">
 								Browser does not support this feature
-							</audio><form method="post" action="deleteSong"><input type="submit" value="Delete Song"><input type="hidden" name="songID" value="%s"></form></p></div>"""%(soundFilename,filename,song)
-			soundHtml = soundHtml+"</a>"
+							</audio><form method="post" action="likeSong"><input type="submit" value="Like"><input type="hidden" name="songID" value="%s"><input type="hidden" name="user" value="%s"></form>"""%(soundFilename,filename,song,username)
+				if(user==''):
+					soundHtml = soundHtml + """<form method="post" action="deleteSong"><input type="submit" value="Delete Song"><input type="hidden" name="songID" value="%s"></form>"""%song
+			soundHtml = soundHtml+"</p></div></a>"
 			tmpl = env.get_template('playSounds.html')
 			return tmpl.render()%soundHtml
+		else:
+			raise cherrypy.HTTPRedirect("/index")
+
+	@cherrypy.expose
+	def likeSong(self, songID, user, recommended='false'):
+		if(cherrypy.session.get('loggedIn', 'None')==True):
+			username = cherrypy.session.get('username', 'None')
+			Neo4jTesting.neoAddLike(username, songID)
+			if(recommended=='false'):
+				if(username==user):
+					raise cherrypy.HTTPRedirect("/playSounds")
+				else:
+					raise cherrypy.HTTPRedirect("/playSounds?user='%s'"%user)
+			else:
+				raise cherrypy.HTTPRedirect('/playRecommended')
 		else:
 			raise cherrypy.HTTPRedirect("/index")
 
@@ -240,6 +257,46 @@ class ServeSite(object):
 			fs.delete(ObjectId(songID))
 			Neo4jTesting.neoDeleteSong(songID)
 			raise cherrypy.HTTPRedirect('/playSounds')
+		else:
+			raise cherrypy.HTTPRedirect('/index')
+
+	@cherrypy.expose
+	def playRecommended(self):
+		if(cherrypy.session.get('loggedIn', 'None')==True):
+			username = cherrypy.session.get('username','None')
+			fs = gridfs.GridFS(mongoDB)
+			byLikeSongIDs = Neo4jTesting.neoGetSimilarByLikes(username)
+			byTagsSongIDs = Neo4jTesting.neoGetUserSongs(username)
+			likeSoundHtml = ""
+			for song in byLikeSongIDs:
+				soundFile = fs.get(ObjectId(song))
+				soundFilename = soundFile.filename
+				filename = "sounds/" + soundFilename
+				fileForSound = open(filename, 'wb')
+				fileForSound.write(soundFile.read())
+				fileForSound.close()
+				likeSoundHtml = likeSoundHtml + """<div>%s<p><audio controls>
+                                                                <source src="%s" type="audio/mpeg">
+                                                                Browser does not support this feature
+                                                        </audio><form method="post" action="likeSong"><input type="submit" value="Like"><input type="hidden" name="songID" value="%s"><input type="hidden" name="user" value="%s"><input type="hidden" name="recommended" value='true'></form>"""%(soundFilename,filename,song,username)
+			
+			tagSoundHtml = ""
+			songs = []
+			for song in byTagsSongIDs:
+				songs = songs + Neo4jTesting.neoGetSimilar(song)
+			for song in songs:
+				soundFile = fs.get(ObjectId(song))
+				soundFilename = soundFile.filename
+				filename = "sounds/" + soundFilename
+				fileForSound = open(filename, 'wb')
+				fileForSound.write(soundFile.read())
+				fileForSound.close()
+				tagSoundHtml = tagSoundHtml + """<div>%s<p><audio controls>
+								<source src="%s" type="audio/mpeg">
+								Browser does not support this feature
+								</audio><form method="post" action="likeSong"><input type="submit" value="Like"><input type="hidden" name="songID" value="%s"><input type="hidden" name="user" value="%s"><input type="hidden" name="recommended" value='true'></form>"""%(soundFilename,filename,song,username)
+			tmpl = env.get_template('recommended.html')
+			return tmpl.render()%(likeSoundHtml, tagSoundHtml)
 		else:
 			raise cherrypy.HTTPRedirect('/index')
 
