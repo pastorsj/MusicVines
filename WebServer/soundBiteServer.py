@@ -116,7 +116,6 @@ class ServeSite(object):
 			tags = str(tags).split(",")
 			tags = map(str.strip, tags)
 			filePutID = fs.put(fileData, filename=sName)
-			print(type(filePutID))
 			Neo4jTesting.neoAddSong(filePutID, sName)
 			Neo4jTesting.neoAddUserSong(uName, filePutID)
 			for tag in tags:
@@ -188,7 +187,7 @@ class ServeSite(object):
 				if(username==user):
 					raise cherrypy.HTTPRedirect("/playSounds")
 				else:
-					raise cherrypy.HTTPRedirect("/playSounds?user='%s'"%user)
+					raise cherrypy.HTTPRedirect("/playSounds?user=%s"%user)
 			else:
 				raise cherrypy.HTTPRedirect('/playRecommended')
 		else:
@@ -283,6 +282,7 @@ class ServeSite(object):
 			tagSoundHtml = ""
 			songs = []
 			for song in byTagsSongIDs:
+				print(str(song))
 				songs = songs + Neo4jTesting.neoGetSimilar(song)
 			for song in songs:
 				soundFile = fs.get(ObjectId(song))
